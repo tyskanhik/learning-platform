@@ -1,0 +1,132 @@
+<app-header></app-header>
+
+<div class="lesson-container">
+  @if (isLoading()) {
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+      <p>Loading lesson...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Error loading lesson</h3>
+      <p>{{ error() }}</p>
+      <button mat-raised-button color="primary" (click)="backToCourse()">
+        <span transloco="course.back_to_catalog"></span>
+      </button>
+    </div>
+  } @else if (localizedLesson(); as currentLesson) {
+    @if (localizedCourse(); as currentCourse) {
+      <div class="lesson-header">
+        <h1>{{ currentLesson.title }}</h1>
+        <p class="course-title">
+          <span transloco="lesson.course"></span>: {{ currentCourse.title }}
+        </p>
+        <div class="lesson-progress">
+          <span transloco="lesson.lesson"></span> {{ currentLessonIndex() + 1 }} 
+          <span transloco="lesson.of"></span> {{ totalLessons() }}
+        </div>
+      </div>
+
+      <div class="lesson-content">
+        <mat-card class="video-card">
+          <mat-card-content>
+            <div class="video-placeholder">
+              <div class="video-player">
+                <div class="video-icon">🎥</div>
+                <h3>
+                  <span transloco="lesson.play"></span>
+                </h3>
+                <p class="video-info">{{ currentLesson.title }}</p>
+                <p class="video-duration">
+                  <span transloco="lesson.duration"></span>: {{ currentLesson.duration }}
+                </p>
+                <div class="video-controls">
+                  <button mat-raised-button color="primary">
+                    <mat-icon>play_arrow</mat-icon>
+                    <span transloco="lesson.play"></span>
+                  </button>
+                  <button mat-button>
+                    <mat-icon>pause</mat-icon>
+                    <span transloco="lesson.pause"></span>
+                  </button>
+                </div>
+                @if (currentLesson.videoUrl) {
+                  <p class="video-url">
+                    Video URL: {{ currentLesson.videoUrl }}
+                  </p>
+                }
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="description-card">
+          <mat-card-header>
+            <mat-card-title>
+              <span transloco="lesson.description"></span>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ currentLesson.description }}</p>
+            <div class="lesson-info">
+              <div class="info-item">
+                <mat-icon>schedule</mat-icon>
+                <span>
+                  <span transloco="lesson.duration"></span>: {{ currentLesson.duration }}
+                </span>
+              </div>
+              <div class="info-item">
+                <mat-icon>format_list_numbered</mat-icon>
+                <span>
+                  <span transloco="lesson.order"></span>: {{ currentLesson.order }}/{{ totalLessons() }}
+                </span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="lesson-navigation">
+        <button mat-button (click)="backToCourse()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+          <span transloco="lesson.back_to_course"></span>
+        </button>
+        
+        <div class="nav-buttons">
+          @if (hasPreviousLesson()) {
+            <button mat-button (click)="previousLesson()" class="prev-button">
+              <mat-icon>chevron_left</mat-icon>
+              <span transloco="lesson.previous"></span>
+            </button>
+          }
+          
+          @if (hasNextLesson()) {
+            <button mat-raised-button color="primary" (click)="nextLesson()" class="next-button">
+              <span transloco="lesson.next"></span>
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+          } @else {
+            <button mat-raised-button color="accent" (click)="backToCourse()" class="complete-button">
+              <mat-icon>check_circle</mat-icon>
+              <span transloco="lesson.complete_course"></span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="lesson-not-found">
+      <mat-icon>error_outline</mat-icon>
+      <h3>
+        <span transloco="lesson.not_found"></span>
+      </h3>
+      <p>
+        <span transloco="lesson.moved"></span>
+      </p>
+      <button mat-raised-button color="primary" routerLink="/courses">
+        <span transloco="course.back_to_catalog"></span>
+      </button>
+    </div>
+  }
+</div>
