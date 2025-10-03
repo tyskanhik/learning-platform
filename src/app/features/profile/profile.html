@@ -102,11 +102,11 @@
                   matInput 
                   formControlName="currentPassword" 
                   type="password"
-                  [placeholder]="'profile.current_password_placeholder' | transloco"
+                  [placeholder]="'profile.current_password' | transloco"
                 >
                 @if (profileForm.controls.currentPassword.hasError('required') && profileForm.controls.currentPassword.touched) {
                   <mat-error>
-                    <span transloco="profile.current_password_required"></span>
+                    <span>current password required</span>
                   </mat-error>
                 }
               </mat-form-field>
@@ -119,11 +119,11 @@
                   matInput 
                   formControlName="newPassword" 
                   type="password"
-                  [placeholder]="'profile.new_password_placeholder' | transloco"
+                  [placeholder]="'profile.new_password' | transloco"
                 >
                 @if (profileForm.controls.newPassword.hasError('minlength') && profileForm.controls.newPassword.touched) {
                   <mat-error>
-                    <span transloco="auth.password_min_length"></span>
+                    <span>password min length</span>
                   </mat-error>
                 }
               </mat-form-field>
@@ -136,11 +136,11 @@
                   matInput 
                   formControlName="confirmPassword" 
                   type="password"
-                  [placeholder]="'profile.confirm_password_placeholder' | transloco"
+                  [placeholder]="'profile.confirm_new_password' | transloco"
                 >
                 @if (profileForm.controls.confirmPassword.hasError('required') && profileForm.controls.confirmPassword.touched) {
                   <mat-error>
-                    <span transloco="auth.confirm_password_required"></span>
+                    <span>confirm password required</span>
                   </mat-error>
                 }
                 @if (getPasswordMismatchError()) {

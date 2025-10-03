@@ -1,0 +1,147 @@
+<app-header></app-header>
+
+<main class="container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>{{ 'home.welcome' | transloco }}</h1>
+      <p class="hero-subtitle">{{ 'home.subtitle' | transloco }}</p>
+    </div>
+  </section>
+
+  <!-- User Welcome -->
+  @if (currentUser(); as user) {
+    <section class="user-welcome">
+      <mat-card class="welcome-card">
+        <mat-card-content>
+          <h2>{{ 'home.welcome_back' | transloco: { name: user.firstName } }}</h2>
+          <div class="role-info">
+            @if (user.role === 'teacher') {
+              <span class="role-badge teacher">
+                <mat-icon>school</mat-icon>
+                {{ 'home.teacher' | transloco }}
+              </span>
+              <p>{{ 'home.teacher_desc' | transloco }}</p>
+            } @else {
+              <span class="role-badge student">
+                <mat-icon>person</mat-icon>
+                {{ 'home.student' | transloco }}
+              </span>
+              <p>{{ 'home.student_desc' | transloco }}</p>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  }
+
+  <!-- Courses Section -->
+  <section class="courses-section">
+    <h2>{{ 'home.available_courses' | transloco }}</h2>
+
+    <!-- Filters -->
+    <div class="filters">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'home.search_courses' | transloco }}</mat-label>
+        <input matInput 
+               [ngModel]="searchTerm()" 
+               (ngModelChange)="searchTerm.set($event)"
+               [placeholder]="'home.search_courses' | transloco">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'courses.category' | transloco }}</mat-label>
+        <mat-select [ngModel]="selectedCategory()" (ngModelChange)="selectedCategory.set($event)">
+          <mat-option value="">{{ 'home.all_categories' | transloco }}</mat-option>
+          @for (category of categories(); track category) {
+            <mat-option [value]="category">{{ category }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'courses.difficulty' | transloco }}</mat-label>
+        <mat-select [ngModel]="selectedDifficulty()" (ngModelChange)="selectedDifficulty.set($event)">
+          <mat-option value="">{{ 'home.any_difficulty' | transloco }}</mat-option>
+          @for (difficulty of difficulties(); track difficulty) {
+            <mat-option [value]="difficulty">
+              {{ getDifficultyText(difficulty) }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (searchTerm() || selectedCategory() || selectedDifficulty()) {
+        <button mat-button (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      }
+    </div>
+
+    <!-- Courses Grid -->
+    <div class="courses-grid">
+      @for (course of filteredCourses(); track trackByCourseId($index, course)) {
+        <mat-card class="course-card">
+          <mat-card-header>
+            <mat-card-title>{{ course.title }}</mat-card-title>
+            <mat-card-subtitle>
+              {{ course.category }} • {{ course.author }}
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="course-description">{{ course.description }}</p>
+
+            <div class="course-meta">
+              <div class="meta-item">
+                <mat-icon>star</mat-icon>
+                <span>Rating: {{ course.rating }}/5</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>school</mat-icon>
+                <span>{{ getDifficultyText(course.difficulty) }}</span>
+              </div>
+              <div class="meta-item">
+                <mat-icon>play_circle</mat-icon>
+                <span>{{ course.lessons.length }} lessons</span>
+              </div>
+            </div>
+
+            @if (currentUser()) {
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span>Your Progress</span>
+                  <span>{{ getCourseProgress(course.id) }}%</span>
+                </div>
+                <mat-progress-bar 
+                  [value]="getCourseProgress(course.id)"
+                  class="progress-bar">
+                </mat-progress-bar>
+              </div>
+            }
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-raised-button color="primary" 
+                    [routerLink]="['/course', course.id]">
+              Course Details
+            </button>
+            @if (currentUser()) {
+              <button mat-button (click)="startLearning(course)">
+                Start Learning
+              </button>
+            }
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <div class="no-courses">
+          <mat-icon>search_off</mat-icon>
+          <h3>No courses found</h3>
+          <p>Try changing your search filters</p>
+        </div>
+      }
+    </div>
+  </section>
+</main>

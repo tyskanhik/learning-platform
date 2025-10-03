@@ -7,12 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDividerModule } from '@angular/material/divider';
 import { CourseService } from '../../core/services/course.service';
 import { UserService } from '../../core/services/user.service';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
 import { CourseModel } from '../../core/models/course.model';
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 interface LocalizedCourse {
   id: number;
@@ -47,10 +48,11 @@ interface LocalizedLesson {
     MatListModule,
     MatIconModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
     Header,
-    TranslocoDirective,
-    MatProgressSpinnerModule
-],
+    TranslocoDirective
+  ],
   templateUrl: './course-details.html',
   styleUrl: './course-details.scss'
 })
@@ -62,6 +64,8 @@ export class CourseDetails implements OnInit {
   languageService = inject(LanguageService);
 
   course = signal<CourseModel | null>(null);
+
+  private progressCache = new Map<number, number>();
   progress = signal<number>(0);
   isLoading = signal(true);
 
@@ -98,7 +102,10 @@ export class CourseDetails implements OnInit {
     if (course) {
       this.course.set(course);
       if (this.userService.currentUser()) {
-        this.progress.set(Math.floor(Math.random() * 100));
+        if (!this.progressCache.has(courseId)) {
+          this.progressCache.set(courseId, Math.floor(Math.random() * 100));
+        }
+        this.progress.set(this.progressCache.get(courseId)!);
       }
     }
     this.isLoading.set(false);

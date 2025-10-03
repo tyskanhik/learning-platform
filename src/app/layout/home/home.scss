@@ -1,0 +1,531 @@
+@use '@angular/material' as mat;
+@use 'sass:color';
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+// Color variables
+$primary-color: #1976d2;
+$primary-light: #e3f2fd;
+$accent-color: #ff4081;
+$warn-color: #f44336;
+$success-color: #4caf50;
+
+$text-primary: #212121;
+$text-secondary: #666;
+$text-disabled: #9e9e9e;
+
+$background-light: #f8f9fa;
+$background-card: #ffffff;
+$border-color: #e0e0e0;
+$shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
+$shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+// Spacing variables
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 1.5rem;
+$spacing-lg: 2rem;
+$spacing-xl: 3rem;
+
+// Breakpoints
+$mobile: 768px;
+$tablet: 1024px;
+
+// Mixins
+@mixin card-base {
+  background: $background-card;
+  border-radius: 8px;
+  box-shadow: $shadow-light;
+  transition: all 0.3s ease;
+}
+
+@mixin card-hover {
+  transform: translateY(-2px);
+  box-shadow: $shadow-hover;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Container
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-sm;
+
+  @media (min-width: $tablet) {
+    padding: $spacing-lg;
+  }
+}
+
+// Hero Section
+.hero-section {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+  padding: $spacing-xl 0;
+  background: linear-gradient(135deg, $primary-light 0%, #ffffff 100%);
+  border-radius: 12px;
+  margin-top: $spacing-sm;
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: $primary-color;
+    margin-bottom: $spacing-md;
+    line-height: 1.2;
+
+    @media (max-width: $mobile) {
+      font-size: 2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: $text-secondary;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+
+    @media (max-width: $mobile) {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+// Welcome Cards
+.welcome-card {
+  @include card-base;
+  margin-bottom: $spacing-lg;
+  border-left: 4px solid $primary-color;
+
+  .welcome-content {
+    padding: $spacing-lg;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+    color: $text-primary;
+    margin-bottom: $spacing-md;
+    font-weight: 500;
+  }
+
+  .welcome-description {
+    color: $text-secondary;
+    line-height: 1.6;
+    margin-bottom: $spacing-md;
+  }
+
+  .role-section {
+    .role-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-sm;
+    }
+
+    .role-description {
+      color: $text-secondary;
+      margin: 0;
+    }
+  }
+}
+
+// Role Badges (ИСПРАВЛЕННЫЙ КОД)
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  width: fit-content;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &.teacher {
+    background: color.adjust($primary-color, $lightness: 45%);
+    color: color.adjust($primary-color, $lightness: -10%);
+    border: 1px solid color.adjust($primary-color, $lightness: 30%);
+  }
+
+  &.student {
+    background: color.adjust($accent-color, $lightness: 40%);
+    color: color.adjust($accent-color, $lightness: -10%);
+    border: 1px solid color.adjust($accent-color, $lightness: 30%);
+  }
+}
+
+// Action Buttons
+.guest-actions {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+  flex-wrap: wrap;
+
+  .action-button {
+    min-width: 140px;
+    
+    mat-icon {
+      margin-right: $spacing-xs;
+    }
+  }
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    align-items: center;
+
+    .action-button {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+}
+
+// Courses Section
+.courses-section {
+  margin-top: $spacing-xl;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: $spacing-lg;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 300;
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+
+    @media (max-width: $mobile) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .section-subtitle {
+    color: $text-secondary;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+// Filters
+.filters-card {
+  @include card-base;
+  margin-bottom: $spacing-lg;
+
+  .filters-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: $spacing-md;
+    align-items: start;
+
+    @media (max-width: $tablet) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: $mobile) {
+      grid-template-columns: 1fr;
+    }
+
+    .search-field {
+      width: 100%;
+    }
+
+    .clear-filters-btn {
+      white-space: nowrap;
+      
+      mat-icon {
+        margin-right: $spacing-xs;
+      }
+    }
+  }
+}
+
+// Courses Container
+.courses-container {
+  min-height: 400px;
+}
+
+// Loading State
+.loading-state {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-xl;
+  color: $text-secondary;
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+// Empty State
+.empty-state {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding: $spacing-xl;
+  text-align: center;
+  color: $text-secondary;
+
+  .empty-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: $text-disabled;
+    margin-bottom: $spacing-sm;
+  }
+
+  .empty-title {
+    font-size: 1.5rem;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  .empty-description {
+    font-size: 1.1rem;
+    margin: 0 0 $spacing-md 0;
+    max-width: 400px;
+  }
+}
+
+// Courses Grid
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: $spacing-lg;
+  margin-bottom: $spacing-lg;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+// Course Card
+.course-card {
+  @include card-base;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &:hover {
+    @include card-hover;
+  }
+
+  &.has-progress {
+    border-top: 3px solid $primary-color;
+  }
+
+  .course-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: $spacing-xs;
+    @include text-ellipsis;
+  }
+
+  .course-subtitle {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+    color: $text-secondary;
+
+    .category {
+      font-weight: 500;
+    }
+
+    .separator {
+      color: $text-disabled;
+    }
+
+    .author {
+      font-style: italic;
+    }
+  }
+
+  .course-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  .course-description {
+    color: $text-secondary;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+  }
+}
+
+// Course Metadata
+.course-metadata {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+
+  .metadata-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: 0.9rem;
+    color: $text-secondary;
+
+    .metadata-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: $primary-color;
+      flex-shrink: 0;
+    }
+
+    .metadata-text {
+      line-height: 1.3;
+    }
+  }
+}
+
+// Progress Section
+.progress-section {
+  margin-top: auto;
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xs;
+    font-size: 0.9rem;
+
+    .progress-label {
+      color: $text-secondary;
+      font-weight: 500;
+    }
+
+    .progress-value {
+      color: $primary-color;
+      font-weight: 600;
+    }
+  }
+
+  .progress-bar {
+    height: 6px;
+    border-radius: 3px;
+
+    ::ng-deep .mat-progress-bar-fill::after {
+      background-color: $primary-color;
+    }
+
+    ::ng-deep .mat-progress-bar-buffer {
+      background-color: $background-light;
+    }
+  }
+}
+
+// Course Actions
+.course-actions {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md !important;
+  border-top: 1px solid $border-color;
+  margin-top: auto;
+
+  .action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-xs;
+
+    &.details-btn {
+      flex: 2;
+    }
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+
+    .action-btn {
+      width: 100%;
+    }
+  }
+}
+
+// Results Info
+.results-info {
+  text-align: center;
+  padding: $spacing-md;
+  border-top: 1px solid $border-color;
+
+  .results-count {
+    color: $text-secondary;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+// Accessibility
+@media (prefers-reduced-motion: reduce) {
+  .course-card,
+  .welcome-card {
+    transition: none;
+  }
+}
+
+// Focus styles for better accessibility
+button:focus-visible,
+input:focus-visible,
+mat-select:focus-visible {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .course-card {
+    border: 1px solid #000;
+  }
+
+  .role-badge {
+    border: 2px solid #000;
+  }
+}

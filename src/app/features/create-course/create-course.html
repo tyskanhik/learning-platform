@@ -27,12 +27,12 @@
             <input 
               matInput 
               formControlName="title"
-              [placeholder]="'create_course.name_placeholder' | transloco"
+              [placeholder]="'create_course.name' | transloco"
             >
             <mat-icon matSuffix>title</mat-icon>
             @if (courseForm.controls.title.hasError('required') && courseForm.controls.title.touched) {
               <mat-error>
-                <span transloco="create_course.name_required"></span>
+                <span>course name required"</span>
               </mat-error>
             }
           </mat-form-field>
@@ -45,13 +45,13 @@
             <textarea 
               matInput 
               formControlName="description"
-              [placeholder]="'create_course.description_placeholder' | transloco"
+              [placeholder]="'create_course.description' | transloco"
               rows="4"
             ></textarea>
             <mat-icon matSuffix>description</mat-icon>
             @if (courseForm.controls.description.hasError('required') && courseForm.controls.description.touched) {
               <mat-error>
-                <span transloco="create_course.description_required"></span>
+                <span>course description required</span>
               </mat-error>
             }
           </mat-form-field>
@@ -69,7 +69,7 @@
             <mat-icon matSuffix>category</mat-icon>
             @if (courseForm.controls.category.hasError('required') && courseForm.controls.category.touched) {
               <mat-error>
-                <span transloco="create_course.category_required"></span>
+                <span>course category required</span>
               </mat-error>
             }
           </mat-form-field>
@@ -83,13 +83,11 @@
               <mat-select formControlName="difficulty">
                 <mat-option value="beginner">
                   <span class="difficulty-option beginner">
-                    <mat-icon>school</mat-icon>
                     <span transloco="home.beginner"></span>
                   </span>
                 </mat-option>
                 <mat-option value="intermediate">
                   <span class="difficulty-option intermediate">
-                    <mat-icon>trending_up</mat-icon>
                     <span transloco="home.intermediate"></span>
                   </span>
                 </mat-option>
@@ -101,27 +99,6 @@
                 </mat-option>
               </mat-select>
               <mat-icon matSuffix>speed</mat-icon>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="half-width">
-              <mat-label>
-                <span transloco="create_course.course_language"></span>
-              </mat-label>
-              <mat-select formControlName="language">
-                <mat-option value="ru">
-                  <span class="language-option">
-                    <span class="flag">🇷🇺</span>
-                    Русский
-                  </span>
-                </mat-option>
-                <mat-option value="en">
-                  <span class="language-option">
-                    <span class="flag">🇺🇸</span>
-                    English
-                  </span>
-                </mat-option>
-              </mat-select>
-              <mat-icon matSuffix>language</mat-icon>
             </mat-form-field>
           </div>
 
