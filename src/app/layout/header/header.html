@@ -1,0 +1,62 @@
+<mat-toolbar color="primary" class="mat-elevation-z4" role="banner">
+  <a routerLink="/" class="logo-link" aria-label="Home">
+    <span>{{ 'header.title' | transloco }}</span>
+  </a>
+  
+  <span class="spacer" aria-hidden="true"></span>
+  
+  <nav class="nav-actions" role="navigation">
+    <!-- Переключатель языка -->
+    <button 
+      mat-icon-button 
+      [matMenuTriggerFor]="languageMenu"
+      [attr.aria-label]="'Switch language'"
+    >
+      <mat-icon>language</mat-icon>
+    </button>
+    <mat-menu #languageMenu="matMenu">
+      <button mat-menu-item (click)="switchLanguage('ru')" [class.active]="currentLang() === 'ru'">
+        <span>🇷🇺 Русский</span>
+      </button>
+      <button mat-menu-item (click)="switchLanguage('en')" [class.active]="currentLang() === 'en'">
+        <span>🇺🇸 English</span>
+      </button>
+    </mat-menu>
+
+    @if (currentUser(); as user) {
+      <button 
+        mat-button 
+        [matMenuTriggerFor]="userMenu"
+        [attr.aria-label]="'User menu'"
+      >
+        <mat-icon>account_circle</mat-icon>
+        <span class="user-name">{{ user.firstName }}</span>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>{{ 'header.profile' | transloco }}</span>
+        </button>
+        @if (user.role === 'teacher') {
+          <button mat-menu-item routerLink="/create-course">
+            <mat-icon>add_circle</mat-icon>
+            <span>{{ 'header.create_course' | transloco }}</span>
+          </button>
+        }
+        <button mat-menu-item (click)="onLogout()">
+          <mat-icon>logout</mat-icon>
+          <span>{{ 'header.logout' | transloco }}</span>
+        </button>
+      </mat-menu>
+    } @else {
+      <button mat-button routerLink="/login">
+        <mat-icon>login</mat-icon>
+        <span>{{ 'header.login' | transloco }}</span>
+      </button>
+      <button mat-raised-button color="accent" routerLink="/register">
+        <mat-icon>person_add</mat-icon>
+        <span>{{ 'header.register' | transloco }}</span>
+      </button>
+    }
+  </nav>
+</mat-toolbar>
