@@ -1,0 +1,117 @@
+<app-header></app-header>
+
+<div class="course-details-container">
+  @if (isLoading()) {
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+      <p>Loading course details...</p>
+    </div>
+  } @else if (localizedCourse(); as courseData) {
+    <div class="course-header">
+      <h1>{{ courseData.title }}</h1>
+      <p class="course-meta">
+        <span transloco="courses.author"></span>: {{ courseData.author }} | 
+        <span transloco="home.rating"></span>: {{ courseData.rating }}/5 | 
+        <span transloco="courses.difficulty"></span>: {{ getDifficultyText(courseData.difficulty) }}
+      </p>
+      
+      @if (userService.currentUser()) {
+        <div class="progress-section">
+          <mat-progress-bar 
+            mode="determinate" 
+            [value]="progress()"
+            class="progress-bar">
+          </mat-progress-bar>
+          <span><span transloco="course.progress"></span>: {{ progress() }}%</span>
+        </div>
+      }
+    </div>
+
+    <div class="course-content">
+      <div class="course-info">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <span transloco="course.description"></span>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ courseData.description }}</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <span transloco="course.objectives"></span>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ul>
+              @for (objective of courseData.objectives; track objective) {
+                <li>{{ objective }}</li>
+              }
+            </ul>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <span transloco="course.program"></span>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ul>
+              @for (item of courseData.program; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="lessons-section">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <span transloco="course.lessons"></span> ({{ courseData.lessons.length }})
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list>
+              @for (lesson of courseData.lessons; track lesson.id) {
+                <mat-list-item class="lesson-item">
+                  <div class="lesson-info">
+                    <span class="lesson-title">{{ lesson.title }}</span>
+                    <span class="lesson-duration">{{ lesson.duration }}</span>
+                  </div>
+                  <button 
+                    mat-icon-button 
+                    (click)="navigateToLesson(courseData.id, lesson.id)"
+                    [disabled]="!userService.currentUser()"
+                    class="play-button"
+                    [attr.aria-label]="'Play lesson ' + lesson.title"
+                  >
+                    <mat-icon>play_circle</mat-icon>
+                  </button>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+              }
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  } @else {
+    <div class="course-not-found">
+      <mat-icon>search_off</mat-icon>
+      <h3>
+        <span transloco="course.not_found"></span>
+      </h3>
+      <button mat-raised-button color="primary" routerLink="/courses">
+        <span transloco="course.back_to_catalog"></span>
+      </button>
+    </div>
+  }
+</div>
