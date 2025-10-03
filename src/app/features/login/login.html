@@ -1,0 +1,97 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>
+        <span transloco="auth.login_title"></span>
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>
+            <span transloco="auth.email"></span>
+          </mat-label>
+          <input 
+            matInput 
+            formControlName="email" 
+            type="email"
+            [placeholder]="'auth.email' | transloco"
+          >
+          <mat-icon matSuffix>email</mat-icon>
+          
+          @if (loginForm.controls.email.hasError('required')) {
+            <mat-error>
+              <span>email required</span>
+            </mat-error>
+          }
+          @if (loginForm.controls.email.hasError('email')) {
+            <mat-error>
+              <span>invalid email</span>
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>
+            <span transloco="auth.password"></span>
+          </mat-label>
+          <input 
+            matInput 
+            formControlName="password" 
+            [type]="hidePassword() ? 'password' : 'text'"
+            [placeholder]="'auth.password' | transloco"
+          >
+          <button 
+            type="button"
+            mat-icon-button 
+            matSuffix 
+            (click)="hidePassword.set(!hidePassword())"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePassword()">
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          
+          @if (loginForm.controls.password.hasError('required')) {
+            <mat-error>
+              <span>password required</span>
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Invalid Credentials Error -->
+        @if (loginForm.hasError('invalidCredentials')) {
+          <div class="error-message" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            <span>invalid credentials</span>
+          </div>
+        }
+
+        <!-- Submit Button -->
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit" 
+          class="full-width submit-btn"
+          [disabled]="!loginForm.valid || isLoading()"
+        >
+          @if (isLoading()) {
+            <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+          }
+          <span transloco="auth.enter"></span>
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions">
+      <div class="register-link">
+        <span transloco="auth.no_account"></span>
+        <a routerLink="/register" mat-button color="accent">
+          <span transloco="auth.register_here"></span>
+        </a>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>
