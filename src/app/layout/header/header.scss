@@ -1,0 +1,82 @@
+:host {
+  display: block;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+  
+  span {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.user-name {
+  margin-left: 4px;
+}
+
+// Стили для активного языка
+.active {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .logo-link span {
+    font-size: 1rem;
+  }
+  
+  .nav-actions {
+    gap: 4px;
+  }
+  
+  .user-name,
+  .nav-actions button:not([mat-icon-button]) span {
+    display: none;
+  }
+  
+  .nav-actions button mat-icon {
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-link span {
+    font-size: 0.9rem;
+  }
+  
+  .nav-actions {
+    gap: 2px;
+  }
+}
+
+// Анимации для плавности
+mat-menu-item {
+  transition: background-color 0.2s ease;
+}
+
+mat-icon {
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
