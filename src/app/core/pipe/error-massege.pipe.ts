@@ -8,7 +8,8 @@ interface ErrorMessages {
 
 @Pipe({
   name: 'errorMessage',
-  standalone: true
+  standalone: true,
+  pure: false
 })
 export class ErrorMessagePipe implements PipeTransform {
   
