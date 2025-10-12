@@ -22,11 +22,9 @@
               formControlName="firstName" 
               [placeholder]="'auth.first_name' | transloco"
             >
-            @if (registerForm.controls.firstName.hasError('required')) {
-              <mat-error>
-                <span>name required</span>
-              </mat-error>
-            }
+            <mat-error>
+              {{ registerForm.controls.firstName | errorMessage }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
@@ -38,6 +36,9 @@
               formControlName="lastName" 
               [placeholder]="'auth.last_name' | transloco"
             >
+            <mat-error>
+              {{ registerForm.controls.lastName | errorMessage }}
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -53,22 +54,9 @@
             placeholder="example@mail.com"
           >
           <mat-icon matSuffix>email</mat-icon>
-          
-          @if (registerForm.controls.email.hasError('required')) {
-            <mat-error>
-              <span>email required</span>
-            </mat-error>
-          }
-          @if (registerForm.controls.email.hasError('email')) {
-            <mat-error>
-              <span>invalid email</span>
-            </mat-error>
-          }
-          @if (registerForm.controls.email.hasError('emailExists')) {
-            <mat-error>
-              <span>email exists</span>
-            </mat-error>
-          }
+          <mat-error>
+            {{ registerForm.controls.email | errorMessage }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Role Selection -->
@@ -84,6 +72,9 @@
               <span transloco="home.teacher"></span>
             </mat-option>
           </mat-select>
+          <mat-error>
+            {{ registerForm.controls.role | errorMessage }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Password Field -->
@@ -107,15 +98,9 @@
           >
             <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          
-          @if (registerForm.controls.password.hasError('required')) {
-            <mat-error>
-              <span>password required</span>
-            </mat-error>
-          }
-          @if (registerForm.controls.password.hasError('minlength')) {
-            <mat-error>Minimum 4 characters</mat-error>
-          }
+          <mat-error>
+            {{ registerForm.controls.password | errorMessage }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Confirm Password Field -->
@@ -139,17 +124,9 @@
           >
             <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          
-          @if (registerForm.controls.confirmPassword.hasError('required')) {
-            <mat-error>
-              <span>confirm password required</span>
-            </mat-error>
-          }
-          @if (getPasswordMismatchError()) {
-            <mat-error>
-              <span>passwords mismatch</span>
-            </mat-error>
-          }
+          <mat-error>
+            {{ registerForm.controls.confirmPassword | errorMessage }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Submit Button -->

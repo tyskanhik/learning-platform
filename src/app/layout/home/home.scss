@@ -237,35 +237,18 @@ $tablet: 1024px;
 }
 
 // Filters
-.filters-card {
-  @include card-base;
-  margin-bottom: $spacing-lg;
+.filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: $spacing-md;
+  align-items: start;
 
-  .filters-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr auto;
-    gap: $spacing-md;
-    align-items: start;
+  @media (max-width: $tablet) {
+    grid-template-columns: 1fr 1fr;
+  }
 
-    @media (max-width: $tablet) {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media (max-width: $mobile) {
-      grid-template-columns: 1fr;
-    }
-
-    .search-field {
-      width: 100%;
-    }
-
-    .clear-filters-btn {
-      white-space: nowrap;
-      
-      mat-icon {
-        margin-right: $spacing-xs;
-      }
-    }
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -337,7 +320,7 @@ $tablet: 1024px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 
   &:hover {
     @include card-hover;

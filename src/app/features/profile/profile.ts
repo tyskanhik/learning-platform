@@ -14,6 +14,7 @@ import { UserService } from '../../core/services/user.service';
 import { Router } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
+import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
 
 @Component({
   selector: 'app-profile',
@@ -31,8 +32,9 @@ import { LanguageService } from '../../core/services/language.service';
     MatDividerModule,
     MatSnackBarModule,
     TranslocoDirective,
-    TranslocoPipe
-  ],
+    TranslocoPipe,
+    ErrorMessagePipe
+],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })
