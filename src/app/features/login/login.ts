@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserService } from '../../core/services/user.service';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
 
 @Component({
   selector: 'app-login',
@@ -25,8 +26,9 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
     MatIconModule,
     MatProgressSpinnerModule,
     TranslocoDirective,
-    TranslocoPipe
-  ],
+    TranslocoPipe,
+    ErrorMessagePipe
+],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

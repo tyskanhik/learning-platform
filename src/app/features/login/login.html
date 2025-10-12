@@ -20,17 +20,9 @@
             [placeholder]="'auth.email' | transloco"
           >
           <mat-icon matSuffix>email</mat-icon>
-          
-          @if (loginForm.controls.email.hasError('required')) {
-            <mat-error>
-              <span>email required</span>
-            </mat-error>
-          }
-          @if (loginForm.controls.email.hasError('email')) {
-            <mat-error>
-              <span>invalid email</span>
-            </mat-error>
-          }
+          <mat-error>
+            {{ loginForm.controls.email | errorMessage }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Password Field -->
@@ -53,19 +45,16 @@
             [attr.aria-pressed]="hidePassword()">
             <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          
-          @if (loginForm.controls.password.hasError('required')) {
-            <mat-error>
-              <span>password required</span>
-            </mat-error>
-          }
+          <mat-error>
+            {{ loginForm.controls.password | errorMessage }}
+          </mat-error>
         </mat-form-field>
 
         <!-- Invalid Credentials Error -->
         @if (loginForm.hasError('invalidCredentials')) {
           <div class="error-message" role="alert">
             <mat-icon>error_outline</mat-icon>
-            <span>invalid credentials</span>
+            <span>{{ 'validation.invalid_credentials' | transloco }}</span>
           </div>
         }
 

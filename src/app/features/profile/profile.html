@@ -44,11 +44,9 @@
                   formControlName="firstName" 
                   [readonly]="!isEditing()"
                 >
-                @if (profileForm.controls.firstName.hasError('required') && profileForm.controls.firstName.touched) {
-                  <mat-error>
-                    <span transloco="auth.first_name_required"></span>
-                  </mat-error>
-                }
+                <mat-error>
+                  {{ profileForm.controls.firstName | errorMessage }}
+                </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="half-width">
@@ -60,6 +58,9 @@
                   formControlName="lastName" 
                   [readonly]="!isEditing()"
                 >
+                <mat-error>
+                  {{ profileForm.controls.lastName | errorMessage }}
+                </mat-error>
               </mat-form-field>
             </div>
 
@@ -74,16 +75,9 @@
                 [readonly]="!isEditing()"
               >
               <mat-icon matSuffix>email</mat-icon>
-              @if (profileForm.controls.email.hasError('email') && profileForm.controls.email.touched) {
-                <mat-error>
-                  <span transloco="auth.invalid_email"></span>
-                </mat-error>
-              }
-              @if (profileForm.controls.email.hasError('required') && profileForm.controls.email.touched) {
-                <mat-error>
-                  <span transloco="auth.email_required"></span>
-                </mat-error>
-              }
+              <mat-error>
+                {{ profileForm.controls.email | errorMessage }}
+              </mat-error>
             </mat-form-field>
           </div>
 
@@ -104,11 +98,9 @@
                   type="password"
                   [placeholder]="'profile.current_password' | transloco"
                 >
-                @if (profileForm.controls.currentPassword.hasError('required') && profileForm.controls.currentPassword.touched) {
-                  <mat-error>
-                    <span>current password required</span>
-                  </mat-error>
-                }
+                <mat-error>
+                  {{ profileForm.controls.currentPassword | errorMessage }}
+                </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="full-width">
@@ -121,11 +113,9 @@
                   type="password"
                   [placeholder]="'profile.new_password' | transloco"
                 >
-                @if (profileForm.controls.newPassword.hasError('minlength') && profileForm.controls.newPassword.touched) {
-                  <mat-error>
-                    <span>password min length</span>
-                  </mat-error>
-                }
+                <mat-error>
+                  {{ profileForm.controls.newPassword | errorMessage }}
+                </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="full-width">
@@ -138,16 +128,9 @@
                   type="password"
                   [placeholder]="'profile.confirm_new_password' | transloco"
                 >
-                @if (profileForm.controls.confirmPassword.hasError('required') && profileForm.controls.confirmPassword.touched) {
-                  <mat-error>
-                    <span>confirm password required</span>
-                  </mat-error>
-                }
-                @if (getPasswordMismatchError()) {
-                  <mat-error>
-                    <span transloco="auth.passwords_mismatch"></span>
-                  </mat-error>
-                }
+                <mat-error>
+                  {{ profileForm.controls.confirmPassword | errorMessage }}
+                </mat-error>
               </mat-form-field>
             </div>
           }

@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserService } from '../../core/services/user.service';
 import { User } from '../../core/models/user.model';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
 
 function passwordMatchValidator(control: AbstractControl) {
   const password = control.get('password');
@@ -38,8 +39,9 @@ function passwordMatchValidator(control: AbstractControl) {
     MatSelectModule,
     MatProgressSpinnerModule,
     TranslocoDirective,
-    TranslocoPipe
-  ],
+    TranslocoPipe,
+    ErrorMessagePipe
+],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })

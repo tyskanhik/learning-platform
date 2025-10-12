@@ -123,5 +123,14 @@
     "course_language": "Course Language",
     "create": "Create Course",
     "cancel": "Cancel"
+  },
+   "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "minlength": "Minimum {{chars}} characters required",
+    "pattern": "Invalid format",
+    "email_exists": "This email is already registered",
+    "password_mismatch": "Passwords do not match",
+    "invalid_credentials": "Invalid email or password"
   }
 }

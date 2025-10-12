@@ -46,7 +46,8 @@
         <input matInput 
                [ngModel]="searchTerm()" 
                (ngModelChange)="searchTerm.set($event)"
-               [placeholder]="'home.search_courses' | transloco">
+               [placeholder]="'home.search_courses' | transloco"
+               class="search-field ">
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
 
