@@ -14,13 +14,18 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Transloco
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 // Components and Services
 import { Header } from '../header/header';
-import { UserService } from '../../core/services/user.service';
 import { CourseService } from '../../core/services/course.service';
 import { LanguageService } from '../../core/services/language.service';
+
+// NgRx
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UserModel } from '../../core/models/user.model';
+import * as UserSelectors from '../../core/store/user/user.selectors';
 
 // Types
 interface LocalizedCourse {
@@ -57,19 +62,19 @@ interface LocalizedCourse {
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
-
 })
 export class Home implements OnInit {
   // Services
-  private userService = inject(UserService);
   private courseService = inject(CourseService);
   private languageService = inject(LanguageService);
   private router = inject(Router);
-  private translocoService = inject(TranslocoService);
+  private store = inject(Store);
 
   // Signals
   courses = this.courseService.courses;
-  currentUser = this.userService.currentUser;
+  
+  // NgRx Observable
+  currentUser$: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
   
   // Filter signals
   searchTerm = signal('');
