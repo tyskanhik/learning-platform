@@ -23,7 +23,7 @@
               [placeholder]="'auth.first_name' | transloco"
             >
             <mat-error>
-              {{ registerForm.controls.firstName | errorMessage }}
+              {{ registerForm.controls.firstName | errorMessage:getControlState(registerForm.controls.firstName) }}
             </mat-error>
           </mat-form-field>
 
@@ -37,7 +37,7 @@
               [placeholder]="'auth.last_name' | transloco"
             >
             <mat-error>
-              {{ registerForm.controls.lastName | errorMessage }}
+              {{ registerForm.controls.lastName | errorMessage:getControlState(registerForm.controls.lastName) }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -55,7 +55,7 @@
           >
           <mat-icon matSuffix>email</mat-icon>
           <mat-error>
-            {{ registerForm.controls.email | errorMessage }}
+            {{ registerForm.controls.email | errorMessage:getControlState(registerForm.controls.email) }}
           </mat-error>
         </mat-form-field>
 
@@ -73,7 +73,7 @@
             </mat-option>
           </mat-select>
           <mat-error>
-            {{ registerForm.controls.role | errorMessage }}
+            {{ registerForm.controls.role | errorMessage:getControlState(registerForm.controls.role) }}
           </mat-error>
         </mat-form-field>
 
@@ -99,7 +99,7 @@
             <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           <mat-error>
-            {{ registerForm.controls.password | errorMessage }}
+            {{ registerForm.controls.password | errorMessage:getControlState(registerForm.controls.password) }}
           </mat-error>
         </mat-form-field>
 
@@ -125,7 +125,7 @@
             <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           <mat-error>
-            {{ registerForm.controls.confirmPassword | errorMessage }}
+            {{ registerForm.controls.confirmPassword | errorMessage:getControlState(registerForm.controls.confirmPassword) }}
           </mat-error>
         </mat-form-field>
 
