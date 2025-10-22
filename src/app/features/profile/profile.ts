@@ -108,9 +108,6 @@ export class Profile {
           this.profileForm.get('currentPassword')?.setErrors({ required: true });
           return;
         }
-        
-        // Здесь должна быть проверка текущего пароля с сервером
-        // Для демо просто показываем успех
       }
       
       this.snackBar.open(
@@ -148,5 +145,13 @@ export class Profile {
       const control = this.profileForm.get(key);
       control?.markAsTouched();
     });
+  }
+
+  getControlState(control: AbstractControl): { touched: boolean; valid: boolean; errorsCount: number } {
+    return {
+      touched: control.touched,
+      valid: control.valid,
+      errorsCount: Object.keys(control.errors || {}).length
+    };
   }
 }

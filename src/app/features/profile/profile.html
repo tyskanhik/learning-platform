@@ -45,7 +45,7 @@
                   [readonly]="!isEditing()"
                 >
                 <mat-error>
-                  {{ profileForm.controls.firstName | errorMessage }}
+                  {{ profileForm.controls.firstName | errorMessage:getControlState(profileForm.controls.firstName) }}
                 </mat-error>
               </mat-form-field>
 
@@ -59,7 +59,7 @@
                   [readonly]="!isEditing()"
                 >
                 <mat-error>
-                  {{ profileForm.controls.lastName | errorMessage }}
+                  {{ profileForm.controls.lastName | errorMessage:getControlState(profileForm.controls.lastName) }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -76,7 +76,7 @@
               >
               <mat-icon matSuffix>email</mat-icon>
               <mat-error>
-                {{ profileForm.controls.email | errorMessage }}
+                {{ profileForm.controls.email | errorMessage:getControlState(profileForm.controls.email) }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -99,7 +99,7 @@
                   [placeholder]="'profile.current_password' | transloco"
                 >
                 <mat-error>
-                  {{ profileForm.controls.currentPassword | errorMessage }}
+                  {{ profileForm.controls.currentPassword | errorMessage:getControlState(profileForm.controls.currentPassword) }}
                 </mat-error>
               </mat-form-field>
 
@@ -114,7 +114,7 @@
                   [placeholder]="'profile.new_password' | transloco"
                 >
                 <mat-error>
-                  {{ profileForm.controls.newPassword | errorMessage }}
+                  {{ profileForm.controls.newPassword | errorMessage:getControlState(profileForm.controls.newPassword) }}
                 </mat-error>
               </mat-form-field>
 
@@ -129,7 +129,7 @@
                   [placeholder]="'profile.confirm_new_password' | transloco"
                 >
                 <mat-error>
-                  {{ profileForm.controls.confirmPassword | errorMessage }}
+                  {{ profileForm.controls.confirmPassword | errorMessage:getControlState(profileForm.controls.confirmPassword) }}
                 </mat-error>
               </mat-form-field>
             </div>

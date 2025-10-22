@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -69,5 +69,13 @@ export class Login {
       const control = this.loginForm.get(key);
       control?.markAsTouched();
     });
+  }
+
+  getControlState(control: AbstractControl): { touched: boolean; valid: boolean; errorsCount: number } {
+    return {
+      touched: control.touched,
+      valid: control.valid,
+      errorsCount: Object.keys(control.errors || {}).length
+    };
   }
 }

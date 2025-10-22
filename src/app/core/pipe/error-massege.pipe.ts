@@ -9,7 +9,7 @@ interface ErrorMessages {
 @Pipe({
   name: 'errorMessage',
   standalone: true,
-  pure: false
+  pure: true
 })
 export class ErrorMessagePipe implements PipeTransform {
   
@@ -25,7 +25,11 @@ export class ErrorMessagePipe implements PipeTransform {
     passwordMismatch: () => this.translocoService.translate('validation.password_mismatch')
   };
 
-  transform(control: AbstractControl | null, customMessages?: ErrorMessages): string | null {
+  transform(
+    control: AbstractControl | null, 
+    controlState: { touched: boolean; valid: boolean; errorsCount: number }
+  ): string | null {
+    
     if (!control || !control.errors || !control.touched) {
       return null;
     }
@@ -33,11 +37,10 @@ export class ErrorMessagePipe implements PipeTransform {
     const errorKey = Object.keys(control.errors)[0];
     const errorValue = control.errors[errorKey];
     
-    const messages = { ...this.defaultErrorMessages, ...customMessages };
+    const messages = { ...this.defaultErrorMessages };
     const message = messages[errorKey];
 
     if (!message) {
-      console.warn(`No error message found for key: ${errorKey}`);
       return null;
     }
 

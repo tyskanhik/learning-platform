@@ -99,4 +99,12 @@ export class Register {
       control?.markAsTouched();
     });
   }
+
+  getControlState(control: AbstractControl): { touched: boolean; valid: boolean; errorsCount: number } {
+    return {
+      touched: control.touched,
+      valid: control.valid,
+      errorsCount: Object.keys(control.errors || {}).length
+    };
+  }
 }

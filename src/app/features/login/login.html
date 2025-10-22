@@ -21,7 +21,7 @@
           >
           <mat-icon matSuffix>email</mat-icon>
           <mat-error>
-            {{ loginForm.controls.email | errorMessage }}
+            {{ loginForm.controls.email | errorMessage:getControlState(loginForm.controls.email) }}
           </mat-error>
         </mat-form-field>
 
@@ -46,7 +46,7 @@
             <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           <mat-error>
-            {{ loginForm.controls.password | errorMessage }}
+            {{ loginForm.controls.password | errorMessage:getControlState(loginForm.controls.password) }}
           </mat-error>
         </mat-form-field>
 
