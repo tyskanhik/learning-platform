@@ -8,9 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { UserService } from '../../core/services/user.service';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
+import { Store } from '@ngrx/store';
+import * as UserActions from '../../core/store/user/user.actions';
 
 @Component({
   selector: 'app-login',
@@ -28,13 +29,13 @@ import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
     TranslocoDirective,
     TranslocoPipe,
     ErrorMessagePipe
-],
+  ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
-  private userService = inject(UserService);
+  private store = inject(Store);
   private router = inject(Router);
 
   hidePassword = signal(true);
@@ -51,10 +52,10 @@ export class Login {
       
       try {
         const { email, password } = this.loginForm.value;
-        if (email && password && this.userService.login(email, password)) {
+        if (email && password) {
+          this.store.dispatch(UserActions.loginUser({ email, password }));
+          await new Promise(resolve => setTimeout(resolve, 50));
           await this.router.navigate(['/']);
-        } else {
-          this.loginForm.setErrors({ invalidCredentials: true });
         }
       } finally {
         this.isLoading.set(false);
