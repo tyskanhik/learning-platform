@@ -6,13 +6,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { UserService } from '../../core/services/user.service';
-import { User } from '../../core/models/user.model';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
+import { Store } from '@ngrx/store';
+import * as UserActions from '../../core/store/user/user.actions';
+import { UserModel } from '../../core/models/user.model';
 
 function passwordMatchValidator(control: AbstractControl) {
   const password = control.get('password');
@@ -41,13 +42,13 @@ function passwordMatchValidator(control: AbstractControl) {
     TranslocoDirective,
     TranslocoPipe,
     ErrorMessagePipe
-],
+  ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Register {
-  private userService = inject(UserService);
+  private store = inject(Store);
   private router = inject(Router);
 
   hidePassword = signal(true);
@@ -63,23 +64,33 @@ export class Register {
     role: new FormControl<'student' | 'teacher'>('student', [Validators.required])
   }, { validators: passwordMatchValidator });
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.registerForm.valid) {
       this.isLoading.set(true);
       
       try {
         const formValue = this.registerForm.value;
         
-        const userData: Omit<User, "id"> = {
-          firstName: formValue.firstName!,
-          lastName: formValue.lastName || '',
-          email: formValue.email!,
-          password: formValue.password!,
-          role: formValue.role!
-        };
+        const newUser = new UserModel(
+          Date.now(),
+          formValue.firstName!,
+          formValue.lastName || '',
+          formValue.email!,
+          formValue.password!,
+          formValue.role!
+        );
         
-        this.userService.register(userData);
-        this.router.navigate(['/']);
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('currentUser', JSON.stringify(newUser));
+        }
+        
+        this.store.dispatch(UserActions.loginUser({ 
+          email: formValue.email!, 
+          password: formValue.password! 
+        }));
+        
+        await this.router.navigate(['/']);
+        
       } finally {
         this.isLoading.set(false);
       }
