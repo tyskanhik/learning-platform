@@ -15,7 +15,7 @@
         <span transloco="courses.difficulty"></span>: {{ getDifficultyText(courseData.difficulty) }}
       </p>
       
-      @if (userService.currentUser()) {
+      @if (currentUser | async) {
         <div class="progress-section">
           <mat-progress-bar 
             mode="determinate" 
@@ -89,7 +89,7 @@
                   <button 
                     mat-icon-button 
                     (click)="navigateToLesson(courseData.id, lesson.id)"
-                    [disabled]="!userService.currentUser()"
+                    [disabled]="!(currentUser | async)"
                     class="play-button"
                     [attr.aria-label]="'Play lesson ' + lesson.title"
                   >
@@ -109,7 +109,7 @@
       <h3>
         <span transloco="course.not_found"></span>
       </h3>
-      <button mat-raised-button color="primary" routerLink="/courses">
+      <button mat-raised-button color="primary" routerLink="/">
         <span transloco="course.back_to_catalog"></span>
       </button>
     </div>

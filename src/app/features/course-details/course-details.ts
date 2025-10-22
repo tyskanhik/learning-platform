@@ -10,10 +10,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { CourseService } from '../../core/services/course.service';
-import { UserService } from '../../core/services/user.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
 import { CourseModel } from '../../core/models/course.model';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UserModel } from '../../core/models/user.model';
+import * as UserSelectors from '../../core/store/user/user.selectors';
 
 interface LocalizedCourse {
   id: number;
@@ -61,10 +64,11 @@ export class CourseDetails implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private courseService = inject(CourseService);
-  userService = inject(UserService);
+  private store = inject(Store);
   languageService = inject(LanguageService);
 
   course = signal<CourseModel | null>(null);
+  currentUser: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
 
   private progressCache = new Map<number, number>();
   progress = signal<number>(0);
@@ -102,20 +106,25 @@ export class CourseDetails implements OnInit {
     
     if (course) {
       this.course.set(course);
-      if (this.userService.currentUser()) {
-        if (!this.progressCache.has(courseId)) {
-          this.progressCache.set(courseId, Math.floor(Math.random() * 100));
+      
+      this.currentUser.subscribe(user => {
+        if (user) {
+          if (!this.progressCache.has(courseId)) {
+            this.progressCache.set(courseId, Math.floor(Math.random() * 100));
+          }
+          this.progress.set(this.progressCache.get(courseId)!);
         }
-        this.progress.set(this.progressCache.get(courseId)!);
-      }
+      });
     }
     this.isLoading.set(false);
   }
 
   navigateToLesson(courseId: number, lessonId: number) {
-    if (this.userService.currentUser()) {
-      this.router.navigate(['/lesson', courseId, lessonId]);
-    }
+    this.currentUser.subscribe(user => {
+      if (user) {
+        this.router.navigate(['/lesson', courseId, lessonId]);
+      }
+    }).unsubscribe();
   }
 
   getDifficultyText(difficulty: string): string {
