@@ -10,11 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { UserService } from '../../core/services/user.service';
 import { Router } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { LanguageService } from '../../core/services/language.service';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
+import { Store } from '@ngrx/store';
+import * as UserSelectors from '../../core/store/user/user.selectors';
+import * as UserActions from '../../core/store/user/user.actions';
+import { Observable } from 'rxjs';
+import { UserModel } from '../../core/models/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -34,18 +37,17 @@ import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
     TranslocoDirective,
     TranslocoPipe,
     ErrorMessagePipe
-],
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Profile {
-  private userService = inject(UserService);
-  private languageService = inject(LanguageService);
+  private store = inject(Store);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-  currentUser = this.userService.currentUser;
+  currentUser: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
   isEditing = signal(false);
 
   profileForm = new FormGroup({
@@ -58,14 +60,15 @@ export class Profile {
   }, { validators: this.passwordMatchValidator });
 
   ngOnInit() {
-    const user = this.currentUser();
-    if (user) {
-      this.profileForm.patchValue({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email
-      });
-    }
+    this.currentUser.subscribe(user => {
+      if (user) {
+        this.profileForm.patchValue({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email
+        });
+      }
+    });
   }
 
   private passwordMatchValidator(group: AbstractControl) {
@@ -82,19 +85,19 @@ export class Profile {
     this.isEditing.set(!this.isEditing());
     
     if (!this.isEditing()) {
-      // Сброс формы при отмене редактирования
-      const user = this.currentUser();
-      if (user) {
-        this.profileForm.patchValue({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
-        });
-        this.profileForm.markAsPristine();
-      }
+      this.currentUser.subscribe(user => {
+        if (user) {
+          this.profileForm.patchValue({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+          });
+          this.profileForm.markAsPristine();
+        }
+      }).unsubscribe();
     }
   }
 
@@ -102,16 +105,17 @@ export class Profile {
     if (this.profileForm.valid) {
       const formValue = this.profileForm.value;
       
-      // Проверка пароля, если пользователь пытается его сменить
+      const userData: Partial<UserModel> = {
+        firstName: formValue.firstName!,
+        lastName: formValue.lastName || '',
+        email: formValue.email!
+      };
+
       if (formValue.newPassword) {
-        if (!formValue.currentPassword) {
-          this.profileForm.get('currentPassword')?.setErrors({ required: true });
-          return;
-        }
-        
-        // Здесь должна быть проверка текущего пароля с сервером
-        // Для демо просто показываем успех
+        userData.password = formValue.newPassword;
       }
+      
+      this.store.dispatch(UserActions.updateUserProfile({ userData }));
       
       this.snackBar.open(
         'Profile updated successfully',
@@ -120,18 +124,16 @@ export class Profile {
       );
       this.isEditing.set(false);
     } else {
-      // Пометить все поля как touched для показа ошибок
       this.markFormGroupTouched();
     }
   }
 
   logout() {
-    this.userService.logout();
+    this.store.dispatch(UserActions.logoutUser());
     this.router.navigate(['/']);
   }
 
-  getRoleTranslation(): string {
-    const user = this.currentUser();
+  getRoleTranslation(user: UserModel | null): string {
     if (!user) return '';
     
     return user.role === 'teacher' ? 
