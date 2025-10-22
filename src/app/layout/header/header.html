@@ -23,7 +23,7 @@
       </button>
     </mat-menu>
 
-    @if (currentUser(); as user) {
+    @if (currentUser$ | async; as user) {
       <button 
         mat-button 
         [matMenuTriggerFor]="userMenu"

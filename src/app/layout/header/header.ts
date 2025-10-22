@@ -2,12 +2,16 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink } from '@angular/router';
-import { UserService } from '../../core/services/user.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { LanguageService } from '../../core/services/language.service';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { Observable } from 'rxjs';
+import { UserModel } from '../../core/models/user.model';
+import { Store } from '@ngrx/store';
+import * as UserSelectors from '../../core/store/user/user.selectors';
+import * as UserActions from '../../core/store/user/user.actions';
 
 @Component({
   selector: 'app-header',
@@ -26,11 +30,11 @@ import { TranslocoPipe } from '@jsverse/transloco';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Header {
-  private userService = inject(UserService);
+  private store = inject(Store);
   private languageService = inject(LanguageService);
   private router = inject(Router);
   
-  currentUser = this.userService.currentUser;
+  currentUser$: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
   currentLang = signal(this.languageService.getCurrentLanguage());
 
   switchLanguage(lang: 'ru' | 'en'): void {
@@ -39,7 +43,7 @@ export class Header {
   }
 
   onLogout(): void {
-    this.userService.logout();
+    this.store.dispatch(UserActions.logoutUser());
     this.router.navigate(['/']);
   }
 }
