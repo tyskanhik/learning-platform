@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Header } from '../../layout/header/header';
 import { MatCardModule } from '@angular/material/card';
@@ -40,7 +40,8 @@ interface LocalizedLesson {
     TranslocoDirective,
   ],
   templateUrl: './lesson.html',
-  styleUrl: './lesson.scss'
+  styleUrl: './lesson.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Lesson implements OnInit {
   private route = inject(ActivatedRoute);

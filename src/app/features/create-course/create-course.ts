@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Header } from '../../layout/header/header';
@@ -11,7 +11,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { LanguageService } from '../../core/services/language.service';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
@@ -33,7 +32,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     MatProgressSpinnerModule
 ],
   templateUrl: './create-course.html',
-  styleUrl: './create-course.scss'
+  styleUrl: './create-course.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateCourse{
   private router = inject(Router);

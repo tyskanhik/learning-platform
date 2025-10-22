@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Header } from '../../layout/header/header';
 import { MatCardModule } from '@angular/material/card';
@@ -36,7 +36,8 @@ import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
     ErrorMessagePipe
 ],
   templateUrl: './profile.html',
-  styleUrl: './profile.scss'
+  styleUrl: './profile.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Profile {
   private userService = inject(UserService);
