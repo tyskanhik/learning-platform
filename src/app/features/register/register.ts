@@ -11,8 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
-import { Store } from '@ngrx/store';
-import * as UserActions from '../../core/store/user/user.actions';
+import { Store } from '@ngxs/store';
+import { LoginUser } from '../../core/store/user.state';
 import { UserModel } from '../../core/models/user.model';
 
 function passwordMatchValidator(control: AbstractControl) {
@@ -84,10 +84,7 @@ export class Register {
           sessionStorage.setItem('currentUser', JSON.stringify(newUser));
         }
         
-        this.store.dispatch(UserActions.loginUser({ 
-          email: formValue.email!, 
-          password: formValue.password! 
-        }));
+        this.store.dispatch(new LoginUser(formValue.email!, formValue.password!));
         
         await this.router.navigate(['/']);
         
