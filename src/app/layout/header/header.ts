@@ -7,11 +7,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { LanguageService } from '../../core/services/language.service';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { Observable } from 'rxjs';
-import { UserModel } from '../../core/models/user.model';
-import { Store } from '@ngrx/store';
-import * as UserSelectors from '../../core/store/user/user.selectors';
-import * as UserActions from '../../core/store/user/user.actions';
+import { Store } from '@ngxs/store';
+import { LogoutUser, UserState } from '../../core/store/user.state';
 
 @Component({
   selector: 'app-header',
@@ -34,7 +31,7 @@ export class Header {
   private languageService = inject(LanguageService);
   private router = inject(Router);
   
-  currentUser$: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
+  currentUser$ = this.store.select(UserState.currentUser);
   currentLang = signal(this.languageService.getCurrentLanguage());
 
   switchLanguage(lang: 'ru' | 'en'): void {
@@ -43,7 +40,7 @@ export class Header {
   }
 
   onLogout(): void {
-    this.store.dispatch(UserActions.logoutUser());
+    this.store.dispatch(new LogoutUser());
     this.router.navigate(['/']);
   }
 }
