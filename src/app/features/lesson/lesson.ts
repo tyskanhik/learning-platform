@@ -9,8 +9,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
 import { CourseModel, Lesson as CourseLesson } from '../../core/models/course.model';
-import { Store } from '@ngrx/store';
-import * as CourseSelectors from '../../core/store/course/course.selectors';
+import { Store } from '@ngxs/store';
+import { CourseState } from '../../core/store/course.state';
+
 
 interface LocalizedCourse {
   id: number;
@@ -101,8 +102,7 @@ export class Lesson implements OnInit {
   private loadLesson(courseId: number, lessonId: number) {
     this.isLoading.set(true);
     this.error.set(null);
-    
-    this.store.select(CourseSelectors.selectLessonById(courseId, lessonId)).subscribe(result => {
+    this.store.select(CourseState.lessonById(courseId, lessonId)).subscribe(result => {
       if (result) {
         this.course.set(result.course);
         this.lesson.set(result.lesson);
