@@ -6,18 +6,18 @@
       <mat-card-header>
         <div class="avatar-section">
           <div class="avatar">
-            {{ (currentUser | async) ?.firstName?.charAt(0) }}{{ (currentUser | async)?.lastName?.charAt(0) }}
+            {{ (currentUser()) ?.firstName?.charAt(0) }}{{ (currentUser())?.lastName?.charAt(0) }}
           </div>
           <div class="user-info">
             <mat-card-title>
-              {{ (currentUser | async)?.firstName }} {{ (currentUser | async)?.lastName }}
+              {{ (currentUser())?.firstName }} {{ (currentUser())?.lastName }}
             </mat-card-title>
             <mat-card-subtitle>
-              {{ (currentUser | async)?.email }}
+              {{ (currentUser())?.email }}
             </mat-card-subtitle>
             <div class="user-role">
-              <span class="role-badge" [class.teacher]="(currentUser | async)?.role === 'teacher'">
-                {{ (currentUser | async)?.role === 'teacher' ? '👨‍🏫 ' : '🎓 ' }}{{ getRoleTranslation(currentUser | async) }}
+              <span class="role-badge" [class.teacher]="(currentUser())?.role === 'teacher'">
+                {{ (currentUser())?.role === 'teacher' ? '👨‍🏫 ' : '🎓 ' }}{{ getRoleTranslation(currentUser()) }}
               </span>
             </div>
           </div>
@@ -170,7 +170,7 @@
     </mat-card>
 
     <!-- Statistics Card for Students -->
-    @if ((currentUser | async)?.role === 'student') {
+    @if ((currentUser())?.role === 'student') {
       <mat-card class="stats-card">
         <mat-card-header>
           <mat-card-title>

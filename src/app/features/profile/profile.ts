@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Header } from '../../layout/header/header';
 import { MatCardModule } from '@angular/material/card';
@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
 import { Store } from '@ngrx/store';
+import { toSignal } from '@angular/core/rxjs-interop';
 import * as UserSelectors from '../../core/store/user/user.selectors';
 import * as UserActions from '../../core/store/user/user.actions';
-import { Observable } from 'rxjs';
 import { UserModel } from '../../core/models/user.model';
 
 @Component({
@@ -42,12 +42,12 @@ import { UserModel } from '../../core/models/user.model';
   styleUrl: './profile.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Profile {
+export class Profile implements OnInit {
   private store = inject(Store);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-  currentUser: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
+  currentUser = toSignal(this.store.select(UserSelectors.selectCurrentUser), { initialValue: null });
   isEditing = signal(false);
 
   profileForm = new FormGroup({
@@ -60,15 +60,15 @@ export class Profile {
   }, { validators: this.passwordMatchValidator });
 
   ngOnInit() {
-    this.currentUser.subscribe(user => {
-      if (user) {
-        this.profileForm.patchValue({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email
-        });
-      }
-    });
+    // Обновляем форму при изменении пользователя
+    const user = this.currentUser();
+    if (user) {
+      this.profileForm.patchValue({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      });
+    }
   }
 
   private passwordMatchValidator(group: AbstractControl) {
@@ -85,19 +85,19 @@ export class Profile {
     this.isEditing.set(!this.isEditing());
     
     if (!this.isEditing()) {
-      this.currentUser.subscribe(user => {
-        if (user) {
-          this.profileForm.patchValue({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-          });
-          this.profileForm.markAsPristine();
-        }
-      }).unsubscribe();
+      // Сбрасываем форму к исходным значениям пользователя
+      const user = this.currentUser();
+      if (user) {
+        this.profileForm.patchValue({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+        this.profileForm.markAsPristine();
+      }
     }
   }
 
