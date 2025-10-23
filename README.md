@@ -1,59 +1,66 @@
-# LearningPlatform
+# Learning Platform - Платформа для онлайн-обучения
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
+Учебное приложение для управления курсами и обучения, реализованное на Angular с поддержкой SSR (Server-Side Rendering).
 
-## Development server
+## 🚀 Технологический стек
 
-To start a local development server, run:
+- **Frontend**: Angular 17+, TypeScript
+- **State Management**: 
+  - `main` - Angular Services + Signals
+  - `NgRx` - NgRx Store + Effects
+  - `NGXS` - NGXS State Management
+- **UI Framework**: Angular Material
+- **Internationalization**: Transloco
+- **SSR**: Angular SSR (Server-Side Rendering)
+- **Routing**: Angular Router с гибридным рендерингом
 
+## 🌟 Функциональность
+
+### 🔐 Аутентификация и пользователи
+- Регистрация и вход пользователей
+- Ролевая модель (Студент/Преподаватель)
+- Управление профилем
+
+### 📚 Управление курсами
+- Просмотр каталога курсов
+- Фильтрация по категориям и сложности
+- Поиск по названию и описанию
+- Детальные страницы курсов
+
+### 🎓 Система обучения
+- Навигация по урокам
+- Видео-уроки (заглушки)
+- Навигация вперед/назад
+
+ ## 🛠️ Установка и запуск
+
+ Клонирование репозитория
+```bash
+git clone <https://github.com/tyskanhik/learning-platform>
+cd learning-platform
+```
+
+
+
+Выбор ветки
+```bash
+git checkout main        # Сервисы + Signals
+git checkout NgRx        # NgRx implementation  
+git checkout NGXS        # NGXS implementation
+```
+
+Установка зависимостей
+```bash
+npm install
+```
+
+Запуск в development режиме
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
+Запуск в ssr режиме production режиме
 ```bash
 ng build
+npm run serve:ssr:learning-platform
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
