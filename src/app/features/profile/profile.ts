@@ -13,11 +13,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
-import { Store } from '@ngrx/store';
-import { toSignal } from '@angular/core/rxjs-interop';
-import * as UserSelectors from '../../core/store/user/user.selectors';
-import * as UserActions from '../../core/store/user/user.actions';
+import { Store } from '@ngxs/store';
 import { UserModel } from '../../core/models/user.model';
+import { LogoutUser, UpdateUserProfile, UserState } from '../../core/store/user.state';
 
 @Component({
   selector: 'app-profile',
@@ -47,7 +45,7 @@ export class Profile implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-  currentUser = toSignal(this.store.select(UserSelectors.selectCurrentUser), { initialValue: null });
+  currentUser = this.store.selectSignal(UserState.currentUser);
   isEditing = signal(false);
 
   profileForm = new FormGroup({
@@ -114,8 +112,8 @@ export class Profile implements OnInit {
       if (formValue.newPassword) {
         userData.password = formValue.newPassword;
       }
-      
-      this.store.dispatch(UserActions.updateUserProfile({ userData }));
+
+      this.store.dispatch(new UpdateUserProfile(userData));
       
       this.snackBar.open(
         'Profile updated successfully',
@@ -129,7 +127,7 @@ export class Profile implements OnInit {
   }
 
   logout() {
-    this.store.dispatch(UserActions.logoutUser());
+    this.store.dispatch(new LogoutUser());
     this.router.navigate(['/']);
   }
 
