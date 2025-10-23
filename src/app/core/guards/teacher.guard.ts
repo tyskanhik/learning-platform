@@ -1,14 +1,14 @@
 import { inject } from '@angular/core';
 import { Router, type CanActivateFn } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store } from '@ngxs/store';
 import { map } from 'rxjs';
-import * as UserSelectors from '../store/user/user.selectors';
+import { UserState } from '../store/user.state';
 
 export const teacherGuard: CanActivateFn = () => {
   const store = inject(Store);
   const router = inject(Router);
 
-  return store.select(UserSelectors.selectCurrentUser).pipe(
+  return store.select(UserState.currentUser).pipe(
     map(currentUser => {
       // Проверяем что пользователь авторизован и его роль - teacher
       if (currentUser && currentUser.role === 'teacher') {
