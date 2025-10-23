@@ -1,14 +1,14 @@
 import { inject } from '@angular/core';
 import { Router, type CanActivateFn } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store } from '@ngxs/store';
 import { map, take } from 'rxjs/operators';
-import * as UserSelectors from '../store/user/user.selectors';
+import { UserState } from '../store/user.state';
 
 export const authGuard: CanActivateFn = () => {
   const store = inject(Store);
   const router = inject(Router);
 
-  return store.select(UserSelectors.selectIsLoggedIn).pipe(
+  return store.select(UserState.isLoggedIn).pipe(
     take(1),
     map(isLoggedIn => {
       if (isLoggedIn) {
