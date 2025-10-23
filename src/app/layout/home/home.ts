@@ -2,6 +2,7 @@ import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } 
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -20,13 +21,10 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Header } from '../header/header';
 import { LanguageService } from '../../core/services/language.service';
 
-// NgRx
-import { Store } from '@ngrx/store';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { UserModel } from '../../core/models/user.model';
-import * as UserSelectors from '../../core/store/user/user.selectors';
-import * as CourseActions from '../../core/store/course/course.actions';
-import * as CourseSelectors from '../../core/store/course/course.selectors';
+// NGXS
+import { Store } from '@ngxs/store';
+import { CourseState, LoadCourses } from '../../core/store/course.state';
+import { UserState } from '../../core/store/user.state';
 
 // Types
 interface LocalizedCourse {
@@ -70,9 +68,9 @@ export class Home implements OnInit {
   private router = inject(Router);
   private store = inject(Store);
 
-  // NgRx Signals
-  courses = toSignal(this.store.select(CourseSelectors.selectAllCourses), { initialValue: [] });
-  currentUser = toSignal(this.store.select(UserSelectors.selectCurrentUser), { initialValue: null });
+  // NGXS Signals
+  courses = toSignal(this.store.select(CourseState.allCourses), { initialValue: [] });
+  currentUser = toSignal(this.store.select(UserState.currentUser), { initialValue: null });
   
   // Filter signals
   searchTerm = signal('');
@@ -134,7 +132,7 @@ export class Home implements OnInit {
 
   // Methods
   ngOnInit(): void {
-    this.store.dispatch(CourseActions.loadCourses());
+    this.store.dispatch(new LoadCourses());
     this.initializeProgress();
   }
 
@@ -147,7 +145,6 @@ export class Home implements OnInit {
   }
 
   getCourseProgress(courseId: number): number {
-    // Всегда возвращаем одно и то же значение для конкретного courseId
     return this.progressCache.get(courseId) || 0;
   }
 
