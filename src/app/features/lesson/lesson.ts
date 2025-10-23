@@ -6,10 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CourseService } from '../../core/services/course.service';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
 import { CourseModel, Lesson as CourseLesson } from '../../core/models/course.model';
+import { Store } from '@ngrx/store';
+import * as CourseSelectors from '../../core/store/course/course.selectors';
 
 interface LocalizedCourse {
   id: number;
@@ -46,7 +47,7 @@ interface LocalizedLesson {
 export class Lesson implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private courseService = inject(CourseService);
+  private store = inject(Store);
   languageService = inject(LanguageService);
 
   course = signal<CourseModel | null>(null);
@@ -101,9 +102,7 @@ export class Lesson implements OnInit {
     this.isLoading.set(true);
     this.error.set(null);
     
-    try {
-      const result = this.courseService.getLessonById(courseId, lessonId);
-      
+    this.store.select(CourseSelectors.selectLessonById(courseId, lessonId)).subscribe(result => {
       if (result) {
         this.course.set(result.course);
         this.lesson.set(result.lesson);
@@ -112,11 +111,8 @@ export class Lesson implements OnInit {
       } else {
         this.error.set('Lesson not found');
       }
-    } catch (err) {
-      this.error.set('Failed to load lesson');
-    } finally {
       this.isLoading.set(false);
-    }
+    });
   }
 
   navigateToLesson(lessonId: number) {
