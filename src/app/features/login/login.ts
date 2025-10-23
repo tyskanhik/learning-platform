@@ -10,8 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ErrorMessagePipe } from "../../core/pipe/error-massege.pipe";
-import { Store } from '@ngrx/store';
-import * as UserActions from '../../core/store/user/user.actions';
+import { Store } from '@ngxs/store';
+import { LoginUser } from '../../core/store/user.state';
 
 @Component({
   selector: 'app-login',
@@ -53,7 +53,7 @@ export class Login {
       try {
         const { email, password } = this.loginForm.value;
         if (email && password) {
-          this.store.dispatch(UserActions.loginUser({ email, password }));
+          this.store.dispatch(new LoginUser(email, password));
           await new Promise(resolve => setTimeout(resolve, 50));
           await this.router.navigate(['/']);
         }
