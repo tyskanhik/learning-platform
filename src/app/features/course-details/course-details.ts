@@ -9,14 +9,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
-import { CourseService } from '../../core/services/course.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
 import { CourseModel } from '../../core/models/course.model';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { UserModel } from '../../core/models/user.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 import * as UserSelectors from '../../core/store/user/user.selectors';
+import * as CourseSelectors from '../../core/store/course/course.selectors';
 
 interface LocalizedCourse {
   id: number;
@@ -63,12 +62,11 @@ interface LocalizedLesson {
 export class CourseDetails implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private courseService = inject(CourseService);
   private store = inject(Store);
   languageService = inject(LanguageService);
 
   course = signal<CourseModel | null>(null);
-  currentUser: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
+  currentUser = toSignal(this.store.select(UserSelectors.selectCurrentUser), { initialValue: null });
 
   private progressCache = new Map<number, number>();
   progress = signal<number>(0);
@@ -102,29 +100,26 @@ export class CourseDetails implements OnInit {
 
   ngOnInit() {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
-    const course = this.courseService.getCourseById(courseId);
     
-    if (course) {
-      this.course.set(course);
-      
-      this.currentUser.subscribe(user => {
-        if (user) {
+    this.store.select(CourseSelectors.selectCourseById(courseId)).subscribe(course => {
+      if (course) {
+        this.course.set(course);
+
+        if (this.currentUser()) {
           if (!this.progressCache.has(courseId)) {
             this.progressCache.set(courseId, Math.floor(Math.random() * 100));
           }
           this.progress.set(this.progressCache.get(courseId)!);
         }
-      });
-    }
-    this.isLoading.set(false);
+      }
+      this.isLoading.set(false);
+    });
   }
 
   navigateToLesson(courseId: number, lessonId: number) {
-    this.currentUser.subscribe(user => {
-      if (user) {
-        this.router.navigate(['/lesson', courseId, lessonId]);
-      }
-    }).unsubscribe();
+    if (this.currentUser()) {
+      this.router.navigate(['/lesson', courseId, lessonId]);
+    }
   }
 
   getDifficultyText(difficulty: string): string {

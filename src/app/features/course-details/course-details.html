@@ -15,7 +15,7 @@
         <span transloco="courses.difficulty"></span>: {{ getDifficultyText(courseData.difficulty) }}
       </p>
       
-      @if (currentUser | async) {
+      @if (currentUser()) {
         <div class="progress-section">
           <mat-progress-bar 
             mode="determinate" 
@@ -89,7 +89,7 @@
                   <button 
                     mat-icon-button 
                     (click)="navigateToLesson(courseData.id, lesson.id)"
-                    [disabled]="!(currentUser | async)"
+                    [disabled]="!(currentUser())"
                     class="play-button"
                     [attr.aria-label]="'Play lesson ' + lesson.title"
                   >
