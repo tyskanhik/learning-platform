@@ -1,4 +1,5 @@
-import { UserModel } from '../../models/user.model';
+import { UserModel } from "../models/user.model";
+
 
 // SSR-совместимая функция для загрузки пользователя из storage
 export function loadUserFromStorage(): UserModel | null {
