@@ -8,6 +8,8 @@ import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { provideStore } from '@ngrx/store';
 import { reducers } from './core/store';
+import { provideEffects } from '@ngrx/effects';
+import { CourseEffects } from './core/store/course/course.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +25,7 @@ export const appConfig: ApplicationConfig = {
         },
         loader: TranslocoHttpLoader
     }),
-    provideStore(reducers)
+    provideStore(reducers),
+    provideEffects([CourseEffects])
 ]
 };
