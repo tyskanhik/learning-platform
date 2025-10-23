@@ -1,9 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Store } from '@ngrx/store';
-import * as UserActions from './core/store/user/user.actions';
-
-
+import { Store } from '@ngxs/store';
+import { InitializeUser } from './core/store/user.state';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +14,6 @@ export class App implements OnInit {
   private store = inject(Store);
 
   ngOnInit(): void {
-    this.store.dispatch(UserActions.initializeUser());
+    this.store.dispatch(new InitializeUser());
   }
 }
