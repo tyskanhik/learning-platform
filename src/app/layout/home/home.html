@@ -10,7 +10,7 @@
   </section>
 
   <!-- User Welcome -->
-  @if (currentUser$ | async; as user) {
+  @if (currentUser(); as user) {
     <section class="user-welcome">
       <mat-card class="welcome-card">
         <mat-card-content>
@@ -110,7 +110,7 @@
               </div>
             </div>
 
-            @if (currentUser$ |async) {
+            @if (currentUser()) {
               <div class="progress-section">
                 <div class="progress-header">
                   <span>Your Progress</span>
@@ -129,7 +129,7 @@
                     [routerLink]="['/course', course.id]">
               Course Details
             </button>
-            @if (currentUser$ | async) {
+            @if (currentUser()) {
               <button mat-button (click)="startLearning(course)">
                 Start Learning
               </button>

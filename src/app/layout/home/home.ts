@@ -18,14 +18,15 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 // Components and Services
 import { Header } from '../header/header';
-import { CourseService } from '../../core/services/course.service';
 import { LanguageService } from '../../core/services/language.service';
 
 // NgRx
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UserModel } from '../../core/models/user.model';
 import * as UserSelectors from '../../core/store/user/user.selectors';
+import * as CourseActions from '../../core/store/course/course.actions';
+import * as CourseSelectors from '../../core/store/course/course.selectors';
 
 // Types
 interface LocalizedCourse {
@@ -65,16 +66,13 @@ interface LocalizedCourse {
 })
 export class Home implements OnInit {
   // Services
-  private courseService = inject(CourseService);
   private languageService = inject(LanguageService);
   private router = inject(Router);
   private store = inject(Store);
 
-  // Signals
-  courses = this.courseService.courses;
-  
-  // NgRx Observable
-  currentUser$: Observable<UserModel | null> = this.store.select(UserSelectors.selectCurrentUser);
+  // NgRx Signals
+  courses = toSignal(this.store.select(CourseSelectors.selectAllCourses), { initialValue: [] });
+  currentUser = toSignal(this.store.select(UserSelectors.selectCurrentUser), { initialValue: null });
   
   // Filter signals
   searchTerm = signal('');
@@ -136,11 +134,11 @@ export class Home implements OnInit {
 
   // Methods
   ngOnInit(): void {
+    this.store.dispatch(CourseActions.loadCourses());
     this.initializeProgress();
   }
 
   private initializeProgress(): void {
-    // Инициализируем прогресс для всех курсов один раз при загрузке
     this.courses().forEach(course => {
       if (!this.progressCache.has(course.id)) {
         this.progressCache.set(course.id, Math.floor(Math.random() * 100));
