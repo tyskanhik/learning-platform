@@ -12,10 +12,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { LanguageService } from '../../core/services/language.service';
 import { CourseModel } from '../../core/models/course.model';
-import { Store } from '@ngrx/store';
+import { Store } from '@ngxs/store';
 import { toSignal } from '@angular/core/rxjs-interop';
-import * as UserSelectors from '../../core/store/user/user.selectors';
-import * as CourseSelectors from '../../core/store/course/course.selectors';
+
+// NGXS импорты вместо NgRx
+import { UserState } from '../../core/store/user.state';
+import { CourseState } from '../../core/store/course.state';
+
 
 interface LocalizedCourse {
   id: number;
@@ -66,7 +69,7 @@ export class CourseDetails implements OnInit {
   languageService = inject(LanguageService);
 
   course = signal<CourseModel | null>(null);
-  currentUser = toSignal(this.store.select(UserSelectors.selectCurrentUser), { initialValue: null });
+  currentUser = toSignal(this.store.select(UserState.currentUser), { initialValue: null });
 
   private progressCache = new Map<number, number>();
   progress = signal<number>(0);
@@ -100,8 +103,7 @@ export class CourseDetails implements OnInit {
 
   ngOnInit() {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
-    
-    this.store.select(CourseSelectors.selectCourseById(courseId)).subscribe(course => {
+    this.store.select(CourseState.courseById(courseId)).subscribe(course => {
       if (course) {
         this.course.set(course);
 
