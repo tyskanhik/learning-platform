@@ -1,19 +1,19 @@
-<div class="register-container">
-  <mat-card class="register-card">
+<div class="register-container" data-cy="register-page">
+  <mat-card class="register-card" data-cy="register-card">
     <mat-card-header>
-      <mat-card-title>
+      <mat-card-title data-cy="register-title">
         <span transloco="auth.register_title"></span>
       </mat-card-title>
-      <mat-card-subtitle>
+      <mat-card-subtitle data-cy="register-subtitle">
         <span transloco="auth.register_subtitle"></span>
       </mat-card-subtitle>
     </mat-card-header>
     
     <mat-card-content>
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form" data-cy="register-form">
         <!-- Name Fields Row -->
         <div class="row">
-          <mat-form-field appearance="outline" class="half-width">
+          <mat-form-field appearance="outline" class="half-width" data-cy="first-name-field">
             <mat-label>
               <span transloco="auth.first_name"></span>
             </mat-label>
@@ -21,13 +21,14 @@
               matInput 
               formControlName="firstName" 
               [placeholder]="'auth.first_name' | transloco"
+              data-cy="first-name-input"
             >
-            <mat-error>
+            <mat-error data-cy="first-name-error">
               {{ registerForm.controls.firstName | errorMessage:getControlState(registerForm.controls.firstName) }}
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
+          <mat-form-field appearance="outline" class="half-width" data-cy="last-name-field">
             <mat-label>
               <span transloco="auth.last_name"></span>
             </mat-label>
@@ -35,15 +36,16 @@
               matInput 
               formControlName="lastName" 
               [placeholder]="'auth.last_name' | transloco"
+              data-cy="last-name-input"
             >
-            <mat-error>
+            <mat-error data-cy="last-name-error">
               {{ registerForm.controls.lastName | errorMessage:getControlState(registerForm.controls.lastName) }}
             </mat-error>
           </mat-form-field>
         </div>
 
         <!-- Email Field -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" data-cy="email-field">
           <mat-label>
             <span transloco="auth.email"></span>
           </mat-label>
@@ -52,33 +54,34 @@
             formControlName="email" 
             type="email" 
             placeholder="example@mail.com"
+            data-cy="email-input"
           >
           <mat-icon matSuffix>email</mat-icon>
-          <mat-error>
+          <mat-error data-cy="email-error">
             {{ registerForm.controls.email | errorMessage:getControlState(registerForm.controls.email) }}
           </mat-error>
         </mat-form-field>
 
         <!-- Role Selection -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" data-cy="role-field">
           <mat-label>
             <span transloco="auth.role"></span>
           </mat-label>
-          <mat-select formControlName="role">
-            <mat-option value="student">
+          <mat-select formControlName="role" data-cy="role-select">
+            <mat-option value="student" data-cy="student-option">
               <span transloco="home.student"></span>
             </mat-option>
-            <mat-option value="teacher">
+            <mat-option value="teacher" data-cy="teacher-option">
               <span transloco="home.teacher"></span>
             </mat-option>
           </mat-select>
-          <mat-error>
+          <mat-error data-cy="role-error">
             {{ registerForm.controls.role | errorMessage:getControlState(registerForm.controls.role) }}
           </mat-error>
         </mat-form-field>
 
         <!-- Password Field -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" data-cy="password-field">
           <mat-label>
             <span transloco="auth.password"></span>
           </mat-label>
@@ -87,6 +90,7 @@
             formControlName="password" 
             [type]="hidePassword() ? 'password' : 'text'"
             placeholder="Minimum 4 characters"
+            data-cy="password-input"
           >
           <button 
             type="button"
@@ -95,16 +99,17 @@
             (click)="hidePassword.set(!hidePassword())"
             [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hidePassword()"
+            data-cy="toggle-password"
           >
             <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          <mat-error>
+          <mat-error data-cy="password-error">
             {{ registerForm.controls.password | errorMessage:getControlState(registerForm.controls.password) }}
           </mat-error>
         </mat-form-field>
 
         <!-- Confirm Password Field -->
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width" data-cy="confirm-password-field">
           <mat-label>
             <span transloco="auth.confirm_password"></span>
           </mat-label>
@@ -113,6 +118,7 @@
             formControlName="confirmPassword" 
             [type]="hideConfirmPassword() ? 'password' : 'text'"
             [placeholder]="'auth.confirm_password' | transloco"
+            data-cy="confirm-password-input"
           >
           <button 
             type="button"
@@ -121,10 +127,11 @@
             (click)="hideConfirmPassword.set(!hideConfirmPassword())"
             [attr.aria-label]="'Hide password confirmation'"
             [attr.aria-pressed]="hideConfirmPassword()"
+            data-cy="toggle-confirm-password"
           >
             <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          <mat-error>
+          <mat-error data-cy="confirm-password-error">
             {{ registerForm.controls.confirmPassword | errorMessage:getControlState(registerForm.controls.confirmPassword) }}
           </mat-error>
         </mat-form-field>
@@ -136,6 +143,7 @@
           type="submit" 
           class="full-width submit-btn"
           [disabled]="!registerForm.valid || isLoading()"
+          data-cy="submit-register"
         >
           @if (isLoading()) {
             <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
@@ -148,7 +156,7 @@
     <mat-card-actions class="card-actions">
       <div class="login-link">
         <span transloco="auth.have_account"></span>
-        <a routerLink="/login" mat-button color="accent">
+        <a routerLink="/login" mat-button color="accent" data-cy="login-link">
           <span transloco="auth.login_here"></span>
         </a>
       </div>
