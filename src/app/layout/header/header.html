@@ -1,5 +1,5 @@
-<mat-toolbar color="primary" class="mat-elevation-z4" role="banner">
-  <a routerLink="/" class="logo-link" aria-label="Home">
+<mat-toolbar color="primary" class="mat-elevation-z4" role="banner" data-cy="header">
+  <a routerLink="/" class="logo-link" aria-label="Home" data-cy="logo-link">
     <span>{{ 'header.title' | transloco }}</span>
   </a>
   
@@ -11,14 +11,15 @@
       mat-icon-button 
       [matMenuTriggerFor]="languageMenu"
       [attr.aria-label]="'Switch language'"
+      data-cy="language-switcher"
     >
       <mat-icon>language</mat-icon>
     </button>
-    <mat-menu #languageMenu="matMenu">
-      <button mat-menu-item (click)="switchLanguage('ru')" [class.active]="currentLang() === 'ru'">
+    <mat-menu #languageMenu="matMenu" data-cy="language-menu">
+      <button mat-menu-item (click)="switchLanguage('ru')" [class.active]="currentLang() === 'ru'" data-cy="language-ru">
         <span>🇷🇺 Русский</span>
       </button>
-      <button mat-menu-item (click)="switchLanguage('en')" [class.active]="currentLang() === 'en'">
+      <button mat-menu-item (click)="switchLanguage('en')" [class.active]="currentLang() === 'en'" data-cy="language-en">
         <span>🇺🇸 English</span>
       </button>
     </mat-menu>
@@ -28,32 +29,33 @@
         mat-button 
         [matMenuTriggerFor]="userMenu"
         [attr.aria-label]="'User menu'"
+        data-cy="user-menu"
       >
         <mat-icon>account_circle</mat-icon>
-        <span class="user-name">{{ user.firstName }}</span>
+        <span class="user-name" data-cy="user-name">{{ user.firstName }}</span>
       </button>
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="/profile">
+      <mat-menu #userMenu="matMenu" data-cy="user-menu-dropdown">
+        <button mat-menu-item routerLink="/profile" data-cy="profile-link">
           <mat-icon>person</mat-icon>
           <span>{{ 'header.profile' | transloco }}</span>
         </button>
         @if (user.role === 'teacher') {
-          <button mat-menu-item routerLink="/create-course">
+          <button mat-menu-item routerLink="/create-course" data-cy="create-course-link">
             <mat-icon>add_circle</mat-icon>
             <span>{{ 'header.create_course' | transloco }}</span>
           </button>
         }
-        <button mat-menu-item (click)="onLogout()">
+        <button mat-menu-item (click)="onLogout()" data-cy="logout-btn">
           <mat-icon>logout</mat-icon>
           <span>{{ 'header.logout' | transloco }}</span>
         </button>
       </mat-menu>
     } @else {
-      <button mat-button routerLink="/login">
+      <button mat-button routerLink="/login" data-cy="login-btn">
         <mat-icon>login</mat-icon>
         <span>{{ 'header.login' | transloco }}</span>
       </button>
-      <button mat-raised-button color="accent" routerLink="/register">
+      <button mat-raised-button color="accent" routerLink="/register" data-cy="register-btn">
         <mat-icon>person_add</mat-icon>
         <span>{{ 'header.register' | transloco }}</span>
       </button>
