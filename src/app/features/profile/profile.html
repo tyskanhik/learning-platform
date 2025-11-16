@@ -1,22 +1,22 @@
 <app-header></app-header>
 
-<div class="profile-container">
+<div class="profile-container" data-cy="profile-page">
   <div class="profile-content">
-    <mat-card class="profile-card">
+    <mat-card class="profile-card" data-cy="profile-card">
       <mat-card-header>
         <div class="avatar-section">
-          <div class="avatar">
+          <div class="avatar" data-cy="user-avatar">
             {{ currentUser()?.firstName?.charAt(0) }}{{ currentUser()?.lastName?.charAt(0) }}
           </div>
           <div class="user-info">
-            <mat-card-title>
+            <mat-card-title data-cy="user-fullname">
               {{ currentUser()?.firstName }} {{ currentUser()?.lastName }}
             </mat-card-title>
-            <mat-card-subtitle>
+            <mat-card-subtitle data-cy="user-email">
               {{ currentUser()?.email }}
             </mat-card-subtitle>
             <div class="user-role">
-              <span class="role-badge" [class.teacher]="currentUser()?.role === 'teacher'">
+              <span class="role-badge" [class.teacher]="currentUser()?.role === 'teacher'" data-cy="user-role">
                 {{ currentUser()?.role === 'teacher' ? '👨‍🏫 ' : '🎓 ' }}{{ getRoleTranslation() }}
               </span>
             </div>
@@ -27,15 +27,15 @@
       <mat-divider></mat-divider>
 
       <mat-card-content>
-        <form [formGroup]="profileForm" class="profile-form">
+        <form [formGroup]="profileForm" class="profile-form" data-cy="profile-form">
           <!-- Basic Information Section -->
           <div class="form-section">
-            <h3>
+            <h3 data-cy="basic-info-title">
               <span transloco="profile.basic_info"></span>
             </h3>
             
             <div class="form-row">
-              <mat-form-field appearance="outline" class="half-width">
+              <mat-form-field appearance="outline" class="half-width" data-cy="first-name-field">
                 <mat-label>
                   <span transloco="auth.first_name"></span>
                 </mat-label>
@@ -43,13 +43,14 @@
                   matInput 
                   formControlName="firstName" 
                   [readonly]="!isEditing()"
+                  data-cy="first-name-input"
                 >
-                <mat-error>
+                <mat-error data-cy="first-name-error">
                   {{ profileForm.controls.firstName | errorMessage:getControlState(profileForm.controls.firstName) }}
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="half-width">
+              <mat-form-field appearance="outline" class="half-width" data-cy="last-name-field">
                 <mat-label>
                   <span transloco="auth.last_name"></span>
                 </mat-label>
@@ -57,14 +58,15 @@
                   matInput 
                   formControlName="lastName" 
                   [readonly]="!isEditing()"
+                  data-cy="last-name-input"
                 >
-                <mat-error>
+                <mat-error data-cy="last-name-error">
                   {{ profileForm.controls.lastName | errorMessage:getControlState(profileForm.controls.lastName) }}
                 </mat-error>
               </mat-form-field>
             </div>
 
-            <mat-form-field appearance="outline" class="full-width">
+            <mat-form-field appearance="outline" class="full-width" data-cy="email-field">
               <mat-label>
                 <span transloco="auth.email"></span>
               </mat-label>
@@ -73,9 +75,10 @@
                 formControlName="email" 
                 type="email" 
                 [readonly]="!isEditing()"
+                data-cy="email-input"
               >
               <mat-icon matSuffix>email</mat-icon>
-              <mat-error>
+              <mat-error data-cy="email-error">
                 {{ profileForm.controls.email | errorMessage:getControlState(profileForm.controls.email) }}
               </mat-error>
             </mat-form-field>
@@ -83,12 +86,12 @@
 
           <!-- Change Password Section (only when editing) -->
           @if (isEditing()) {
-            <div class="form-section">
-              <h3>
+            <div class="form-section" data-cy="password-section">
+              <h3 data-cy="change-password-title">
                 <span transloco="profile.change_password"></span>
               </h3>
               
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline" class="full-width" data-cy="current-password-field">
                 <mat-label>
                   <span transloco="profile.current_password"></span>
                 </mat-label>
@@ -97,13 +100,14 @@
                   formControlName="currentPassword" 
                   type="password"
                   [placeholder]="'profile.current_password' | transloco"
+                  data-cy="current-password-input"
                 >
-                <mat-error>
+                <mat-error data-cy="current-password-error">
                   {{ profileForm.controls.currentPassword | errorMessage:getControlState(profileForm.controls.currentPassword) }}
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline" class="full-width" data-cy="new-password-field">
                 <mat-label>
                   <span transloco="profile.new_password"></span>
                 </mat-label>
@@ -112,13 +116,14 @@
                   formControlName="newPassword" 
                   type="password"
                   [placeholder]="'profile.new_password' | transloco"
+                  data-cy="new-password-input"
                 >
-                <mat-error>
+                <mat-error data-cy="new-password-error">
                   {{ profileForm.controls.newPassword | errorMessage:getControlState(profileForm.controls.newPassword) }}
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline" class="full-width" data-cy="confirm-password-field">
                 <mat-label>
                   <span transloco="profile.confirm_new_password"></span>
                 </mat-label>
@@ -127,8 +132,9 @@
                   formControlName="confirmPassword" 
                   type="password"
                   [placeholder]="'profile.confirm_new_password' | transloco"
+                  data-cy="confirm-password-input"
                 >
-                <mat-error>
+                <mat-error data-cy="confirm-password-error">
                   {{ profileForm.controls.confirmPassword | errorMessage:getControlState(profileForm.controls.confirmPassword) }}
                 </mat-error>
               </mat-form-field>
@@ -140,7 +146,7 @@
       <mat-card-actions>
         <div class="actions">
           @if (!isEditing()) {
-            <button mat-raised-button color="primary" (click)="toggleEdit()" class="edit-btn">
+            <button mat-raised-button color="primary" (click)="toggleEdit()" class="edit-btn" data-cy="edit-profile-btn">
               <mat-icon>edit</mat-icon>
               <span transloco="profile.edit_profile"></span>
             </button>
@@ -151,17 +157,18 @@
               (click)="saveProfile()" 
               [disabled]="!profileForm.valid || !profileForm.dirty"
               class="save-btn"
+              data-cy="save-profile-btn"
             >
               <mat-icon>save</mat-icon>
               <span transloco="profile.save"></span>
             </button>
-            <button mat-button (click)="toggleEdit()" class="cancel-btn">
+            <button mat-button (click)="toggleEdit()" class="cancel-btn" data-cy="cancel-edit-btn">
               <mat-icon>cancel</mat-icon>
               <span transloco="profile.cancel"></span>
             </button>
           }
           
-          <button mat-button color="warn" (click)="logout()" class="logout-btn">
+          <button mat-button color="warn" (click)="logout()" class="logout-btn" data-cy="logout-btn">
             <mat-icon>logout</mat-icon>
             <span transloco="header.logout"></span>
           </button>
@@ -171,27 +178,27 @@
 
     <!-- Statistics Card for Students -->
     @if (currentUser()?.role === 'student') {
-      <mat-card class="stats-card">
+      <mat-card class="stats-card" data-cy="stats-card">
         <mat-card-header>
-          <mat-card-title>
+          <mat-card-title data-cy="stats-title">
             <span transloco="profile.my_progress"></span>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="stats-grid">
-            <div class="stat-item">
+          <div class="stats-grid" data-cy="stats-grid">
+            <div class="stat-item" data-cy="completed-courses">
               <div class="stat-number">0</div>
               <div class="stat-label">
                 <span transloco="profile.completed_courses"></span>
               </div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-cy="completed-lessons">
               <div class="stat-number">0</div>
               <div class="stat-label">
                 <span transloco="profile.completed_lessons"></span>
               </div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-cy="learning-time">
               <div class="stat-number">0ч</div>
               <div class="stat-label">
                 <span transloco="profile.learning_time"></span>
